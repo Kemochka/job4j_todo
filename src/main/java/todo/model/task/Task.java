@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,9 +16,11 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
+    private String name;
+    @Column
     private String description;
     @Column
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
     @Column
     private boolean done;
 }
