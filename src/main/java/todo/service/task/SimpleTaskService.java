@@ -40,7 +40,7 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public List<Task> findByDone(boolean isDone) {
-        return taskRepository.findByDone(true);
+        return taskRepository.findByDone(isDone);
     }
 
     @Override

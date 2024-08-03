@@ -114,8 +114,8 @@ public class HbmTaskRepository implements TaskRepository {
         List<Task> tasks = new ArrayList<>();
         try {
             session.beginTransaction();
-            var query = session.createQuery("from Task as t where t.done = :fDone", Task.class)
-                    .setParameter("fDone", true);
+            var query = session.createQuery("from Task where done = :fDone", Task.class)
+                    .setParameter("fDone", isDone);
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (HibernateException e) {
