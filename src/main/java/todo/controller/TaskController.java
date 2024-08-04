@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import todo.model.task.Task;
+import todo.model.user.User;
 import todo.service.task.TaskService;
 
 @Controller
@@ -60,7 +61,8 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String getCreationPage(@ModelAttribute Task task, Model model) {
+    public String getCreationPage(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user) {
+        task.setUser(user);
         var taskOptional = taskService.save(task);
         if (taskOptional.isEmpty()) {
             model.addAttribute("message", "Task don`t saved");
@@ -70,7 +72,8 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model) {
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user) {
+        task.setUser(user);
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Failed to update task");

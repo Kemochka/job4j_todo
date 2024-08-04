@@ -1,6 +1,7 @@
 package todo.model.task;
 
 import lombok.*;
+import todo.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,4 +25,7 @@ public class Task {
     private LocalDateTime created = LocalDateTime.now();
     @Column
     private boolean done;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 }

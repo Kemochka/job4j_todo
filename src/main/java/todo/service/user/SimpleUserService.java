@@ -6,7 +6,6 @@ import todo.model.user.User;
 import todo.repository.user.UserRepository;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +21,11 @@ public class SimpleUserService implements UserService {
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
         return userRepository.findByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
     }
 
     @Override

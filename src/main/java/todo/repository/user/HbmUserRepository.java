@@ -55,6 +55,20 @@ public class HbmUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findById(int id) {
+        Session session = sf.openSession();
+        try {
+            session.beginTransaction();
+            User user = session.get(User.class, id);
+            session.getTransaction().commit();
+            return Optional.of(user);
+        } catch (Exception e) {
+            LOGGER.error("Exception during find user by id", e);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public boolean deleteByLogin(String login) {
         Session session = sf.openSession();
         boolean result = false;

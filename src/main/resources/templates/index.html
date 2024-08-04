@@ -40,6 +40,7 @@
                         <th scope="col">Имя</th>
                         <th scope="col">Дата создания</th>
                         <th scope="col">Состояние</th>
+                        <th scope="col">Пользователь</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -49,6 +50,7 @@
                                th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
                         <td th:text="${#temporals.format(task.created, 'dd.MM.yyyy hh:MM')}"></td>
                         <td th:text="${task.done}"></td>
+                        <td th:text="${user.name}"></td>
                     </tr>
                     </tbody>
                 </table>
