@@ -62,7 +62,9 @@ public class HbmTaskRepository implements TaskRepository {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
-            session.delete(task);
+            session.createQuery("delete Task where id = :fId")
+                    .setParameter("fId", task.getId())
+                    .executeUpdate();
             session.getTransaction().commit();
             return true;
         } catch (HibernateException e) {

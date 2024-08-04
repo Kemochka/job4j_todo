@@ -61,28 +61,21 @@ public class TaskController {
 
     @PostMapping("/create")
     public String getCreationPage(@ModelAttribute Task task, Model model) {
-        try {
-            taskService.save(task);
-            return "redirect:/index";
-
-        } catch (Exception e) {
+        var taskOptional = taskService.save(task);
+        if (taskOptional.isEmpty()) {
             model.addAttribute("message", "Task don`t saved");
             return "errors/404";
         }
+        return "redirect:/index";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
-        try {
-            var isUpdated = taskService.update(task);
-            if (!isUpdated) {
-                model.addAttribute("message", "Failed to update task");
-                return "errors/404";
-            }
-            return "redirect:/index";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+        var isUpdated = taskService.update(task);
+        if (!isUpdated) {
+            model.addAttribute("message", "Failed to update task");
+            return "errors/404";
         }
-        return "errors/404";
+        return "redirect:/index";
     }
 }
