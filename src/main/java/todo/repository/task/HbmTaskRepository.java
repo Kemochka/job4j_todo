@@ -68,7 +68,7 @@ public class HbmTaskRepository implements TaskRepository {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException e) {
-            LOGGER.error("Exception during delete task");
+            LOGGER.error("Exception during delete task", e);
         } finally {
             session.close();
         }
@@ -87,7 +87,7 @@ public class HbmTaskRepository implements TaskRepository {
             session.getTransaction().commit();
             result = true;
         } catch (HibernateException e) {
-            LOGGER.error("Exception during setDone task");
+            LOGGER.error("Exception during setDone task", e);
         } finally {
             session.close();
         }
@@ -103,7 +103,7 @@ public class HbmTaskRepository implements TaskRepository {
             session.getTransaction().commit();
             return Optional.of(task);
         } catch (HibernateException e) {
-            LOGGER.error("Exception during get task by id");
+            LOGGER.error("Exception during get task by id", e);
         } finally {
             session.close();
         }
@@ -121,7 +121,7 @@ public class HbmTaskRepository implements TaskRepository {
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (HibernateException e) {
-            LOGGER.error("Exception during find tasks by done");
+            LOGGER.error("Exception during find tasks by done", e);
         } finally {
             session.close();
         }
@@ -137,7 +137,7 @@ public class HbmTaskRepository implements TaskRepository {
             tasks = session.createQuery("from Task", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
-            LOGGER.error("Exception during find all tasks");
+            LOGGER.error("Exception during find all tasks", e);
         } finally {
             session.close();
         }
