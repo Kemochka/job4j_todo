@@ -2,66 +2,39 @@ package todo.repository.user;
 
 import lombok.AllArgsConstructor;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import todo.model.user.User;
+import todo.repository.CrudRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @AllArgsConstructor
 public class HbmUserRepository implements UserRepository {
-    private final SessionFactory sf;
+    private final CrudRepository crudRepository;
     private static final Logger LOGGER = Logger.getLogger(HbmUserRepository.class);
 
     @Override
     public Optional<User> save(User user) {
-        Session session = sf.openSession();
         try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
+            crudRepository.run(session -> session.save(user));
             return Optional.of(user);
         } catch (Exception e) {
             LOGGER.error("Exception during save user", e);
-        } finally {
-            session.close();
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
-            Query<User> query = session.createQuery("from User where login = :fLogin and password = :fPassword", User.class)
-                    .setParameter("fLogin", login)
-                    .setParameter("fPassword", password);
-            Optional<User> user = query.uniqueResultOptional();
-            session.getTransaction().commit();
-            return user;
-        } catch (Exception e) {
-            LOGGER.error("Exception during find user by login and password", e);
-        } finally {
-            session.close();
-        }
-        return Optional.empty();
+        return crudRepository.optional("from User where login = :fLogin and password = :fPassword", User.class,
+                Map.of("fLogin", login, "fPassword", password));
     }
 
     @Override
     public Optional<User> findById(int id) {
-        Session session = sf.openSession();
         try {
-            session.beginTransaction();
-            User user = session.get(User.class, id);
-            session.getTransaction().commit();
-            return Optional.of(user);
+            crudRepository.optional("from User where id = :fId", User.class, Map.of("fId", id));
         } catch (Exception e) {
             LOGGER.error("Exception during find user by id", e);
         }
@@ -70,14 +43,9 @@ public class HbmUserRepository implements UserRepository {
 
     @Override
     public boolean deleteByLogin(String login) {
-        Session session = sf.openSession();
         boolean result = false;
         try {
-            session.beginTransaction();
-            session.createQuery("delete from User where login = :fLogin")
-                    .setParameter("fLogin", login)
-                    .executeUpdate();
-            session.getTransaction().commit();
+            crudRepository.run("delete from User where login = :fLogin", Map.of("fLogin", login));
             result = true;
         } catch (Exception e) {
             LOGGER.error("Exception during delete user by login", e);
@@ -87,17 +55,6 @@ public class HbmUserRepository implements UserRepository {
 
     @Override
     public Collection<User> findAll() {
-        Session session = sf.openSession();
-        List<User> users = new ArrayList<>();
-        try {
-            session.beginTransaction();
-            users = session.createQuery("from User", User.class).list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            LOGGER.error("Exception during find all users", e);
-        } finally {
-            session.close();
-        }
-        return users;
+        return crudRepository.query("from User as u", User.class);
     }
 }
