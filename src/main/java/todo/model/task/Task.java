@@ -1,6 +1,7 @@
 package todo.model.task;
 
 import lombok.*;
+import todo.model.priority.Priority;
 import todo.model.user.User;
 
 import javax.persistence.*;
@@ -28,4 +29,7 @@ public class Task {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 }

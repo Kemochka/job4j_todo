@@ -65,7 +65,7 @@ public class HbmTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> getById(int id) {
         return crudRepository.optional(
-                "from Task where id = :fId", Task.class,
+                "from Task as t join fetch t.priority where id = :fId", Task.class,
                 Map.of("fId", id));
     }
 
@@ -73,7 +73,7 @@ public class HbmTaskRepository implements TaskRepository {
     public List<Task> findByDone(boolean isDone) {
         List<Task> tasks = new ArrayList<>();
         try {
-            tasks = crudRepository.query("from Task where done = :fDone", Task.class, Map.of("fDone", isDone));
+            tasks = crudRepository.query("from Task as t join fetch t.priority where done = :fDone", Task.class, Map.of("fDone", isDone));
         } catch (Exception e) {
             LOGGER.error("Exception during find tasks by done", e);
         }
@@ -82,6 +82,6 @@ public class HbmTaskRepository implements TaskRepository {
 
     @Override
     public Collection<Task> findAll() {
-        return crudRepository.query("from Task", Task.class);
+        return crudRepository.query("from Task as t join fetch t.priority", Task.class);
     }
 }
