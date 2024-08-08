@@ -16,5 +16,6 @@
         <mapping class="todo.model.task.Task"/>
         <mapping class="todo.model.user.User"/>
         <mapping class="todo.model.priority.Priority"/>
+        <mapping class="todo.model.category.Category"/>
     </session-factory>
 </hibernate-configuration>
