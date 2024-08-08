@@ -65,7 +65,7 @@ public class HbmTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> getById(int id) {
         return crudRepository.optional(
-                "from Task as t join fetch t.priority where id = :fId", Task.class,
+                "from Task as t join fetch t.priority where t.id = :fId", Task.class,
                 Map.of("fId", id));
     }
 

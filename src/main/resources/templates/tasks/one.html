@@ -34,6 +34,10 @@
                 <textarea class="form-control" id="description" name="description" th:field="*{description}" rows="10"
                           placeholder="Опишите задание"></textarea>
             </div>
+            <div class="mb-3">
+                <label for="priority" class="form-label"><b>Приоритет</b></label>
+                <input type="text" class="form-control" id="priority" disabled="disabled" name="priority"  th:field="*{priority.name}" placeholder="Приоритет">
+            </div>
             <div class="mb-3 row">
                 <div class="col-6"></div>
                 <div class="col-6">
