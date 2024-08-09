@@ -36,7 +36,7 @@ public class Task {
     private Priority priority;
     @ManyToMany
     @JoinTable(
-            name = "categories",
+            name = "tasks_categories",
             joinColumns = {@JoinColumn(name = "task_id")},
             inverseJoinColumns = {@JoinColumn(name = "category_id")}
     )
