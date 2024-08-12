@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import todo.model.task.Task;
 import todo.model.user.User;
+import todo.service.category.CategoryService;
 import todo.service.priority.PriorityService;
 import todo.service.task.TaskService;
+
+import java.util.Set;
 
 @Controller
 @RequestMapping("/tasks")
@@ -15,9 +18,11 @@ import todo.service.task.TaskService;
 public class TaskController {
     private final TaskService taskService;
     private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("priorities", priorityService.findAll());
         return "tasks/create";
     }
@@ -29,6 +34,7 @@ public class TaskController {
             model.addAttribute("message", "Task by id not found");
             return "errors/404";
         }
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("task", taskOptional.get());
         return "tasks/one";
     }
@@ -52,6 +58,7 @@ public class TaskController {
         }
         model.addAttribute("task", taskOptional.get());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/change";
     }
 
@@ -65,24 +72,29 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String getCreationPage(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user) {
-        task.setUser(user);
-        var taskOptional = taskService.save(task);
-        if (taskOptional.isEmpty()) {
-            model.addAttribute("message", "Task don`t saved");
-            return "errors/404";
+    public String create(@ModelAttribute Task task,  @SessionAttribute("user") User user,
+                         @RequestParam(required = false) Set<Integer> idCategories) {
+        if (!idCategories.isEmpty()) {
+            task.setCategories(categoryService.findCategoriesById(idCategories));
         }
-        return "redirect:/index";
+        task.setUser(user);
+        if (taskService.save(task).isPresent()) {
+            return "redirect:/";
+        }
+        return "errors/404";
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user) {
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user,
+                         @RequestParam(required = false) Set<Integer> idCategories) {
         task.setUser(user);
-        var isUpdated = taskService.update(task);
-        if (!isUpdated) {
+        if (!idCategories.isEmpty()) {
+            task.setCategories(categoryService.findCategoriesById(idCategories));
+        }
+        if (!taskService.update(task)) {
             model.addAttribute("message", "Failed to update task");
             return "errors/404";
         }
-        return "redirect:/index";
+        return "redirect:/";
     }
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--  Зависимости Bootstrap-->
     <meta charset="utf-8">
@@ -37,6 +37,14 @@
             <div class="mb-3">
                 <label for="priority" class="form-label"><b>Приоритет</b></label>
                 <input type="text" class="form-control" id="priority" disabled="disabled" name="priority"  th:field="*{priority.name}" placeholder="Приоритет">
+            </div>
+            <div class="form-group">
+                <label><b>Категория</b></label>
+                <ul>
+                    <li th:each="category : ${task.categories}">
+                        <span th:text="${category.name}"/>
+                    </li>
+                </ul>
             </div>
             <div class="mb-3 row">
                 <div class="col-6"></div>

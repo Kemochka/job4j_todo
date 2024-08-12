@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!--  Зависимости Bootstrap-->
     <meta charset="utf-8">
@@ -42,6 +42,7 @@
                         <th scope="col">Состояние</th>
                         <th scope="col">Пользователь</th>
                         <th scope="col">Приоритет</th>
+                        <th scope="col">Категории</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -53,6 +54,13 @@
                         <td th:text="${task.done}"></td>
                         <td th:text="${user.name}"></td>
                         <td th:text="${task.priority.name}"></td>
+                        <td>
+                            <ul>
+                                <li th:each="category : ${task.categories}">
+                                    <span th:text="${category.name}"></span>
+                                </li>
+                            </ul>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
