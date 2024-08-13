@@ -74,9 +74,7 @@ public class TaskController {
     @PostMapping("/create")
     public String create(@ModelAttribute Task task,  @SessionAttribute("user") User user,
                          @RequestParam(required = false) Set<Integer> idCategories) {
-        if (!idCategories.isEmpty()) {
-            task.setCategories(categoryService.findCategoriesById(idCategories));
-        }
+        task.setCategories(categoryService.findCategoriesById(idCategories));
         task.setUser(user);
         if (taskService.save(task).isPresent()) {
             return "redirect:/";
@@ -88,9 +86,7 @@ public class TaskController {
     public String update(@ModelAttribute Task task, Model model, @SessionAttribute("user") User user,
                          @RequestParam(required = false) Set<Integer> idCategories) {
         task.setUser(user);
-        if (!idCategories.isEmpty()) {
-            task.setCategories(categoryService.findCategoriesById(idCategories));
-        }
+        task.setCategories(categoryService.findCategoriesById(idCategories));
         if (!taskService.update(task)) {
             model.addAttribute("message", "Failed to update task");
             return "errors/404";
