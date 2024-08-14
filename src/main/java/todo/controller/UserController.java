@@ -12,7 +12,9 @@ import todo.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Controller
 @RequestMapping("/users")
@@ -30,6 +32,11 @@ public class UserController {
             user = new User();
             user.setName("Гость");
         }
+        var zones = new ArrayList<TimeZone>();
+        for (String timeId : TimeZone.getAvailableIDs()) {
+            zones.add(TimeZone.getTimeZone(timeId));
+        }
+        model.addAttribute("zones", zones);
         model.addAttribute("user", user);
         return "users/register";
     }

@@ -7,6 +7,7 @@ import todo.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class Task {
     @Column
     private String description;
     @Column
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC"));
     @Column
     private boolean done;
     @ManyToOne()
